@@ -20,7 +20,7 @@ read -s -p "Senha - mínimo 8 caracteres " PASSWORD
 echo ""
 
 #Validação de senha
-if [${#PASSWORD} -lt 8]; then
+if [ ${#PASSWORD} -lt 8 ]; then
    echo "ERRO - SENHA MUITO CURTA - USE PELO MENOS 8 CARACTERES"
    exit 1
 fi
@@ -28,7 +28,7 @@ fi
 
 useradd -m -c "$FULL_NAME" -s /bin/bash "$USERNAME"
 
-if [ $? -eq 0]; then
+if [ $? -eq 0 ]; then
  echo "$USERNAME:$PASSWORD" | chpasswd
  passwd --expire "$USERNAME"
  # forçar inicializaçãocom senha resetada
@@ -38,7 +38,8 @@ if [ $? -eq 0]; then
  echo "USUÁRIO $USERNAME CRIADO"
  echo "NOTA --- SERÁ NECESSÁRIO A ALTERAÇÃO DE SENHA NO PRIMEIRO ACESSO"   
 else
-   echo "ERRO FALHA CRÍTICA AO CRIAR O SISTEMA"
+   echo "ERRO FALHA CRÍTICA AO CRIAR O SISTEMA - DESFAZENDO A CRIAÇÃO DO USUÁRIO"
+   userdel -r "$USERNAME"
    exit 1 
 fi
 
